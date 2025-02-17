@@ -1,8 +1,8 @@
 # markdown-it-sse-template
-基于`markdown-it`（[文档](https://www.npmjs.com/package/markdown-it)，渲染sse流式输出的模版
+基于`markdown-it`[文档](https://www.npmjs.com/package/markdown-it)，渲染sse流式输出的模版
 
-# 对应掘金文章
-https://juejin.cn/post/7451877734709575715
+# 详细技术说明
+[掘金](https://juejin.cn/post/7451877734709575715)
 
 
 # 扩展的功能
