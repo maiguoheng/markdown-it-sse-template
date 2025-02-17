@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>markdown-it渲染流式sse</title>
+  <script src="./rem.js"></script>
+  <!-- 引入mathjax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['$$', '$$'], ['\\$', '\\$'], ['\\(', '\\)']],
+        displayMath: [['\\$$', '\\$$'], ['\\[', '\\]']],
+        processEscapes: false,
+        macros: {
+          d: '\\mathop{}\\!\\mathrm{d}',
+          degree: '\\unicode{x00B0}',
+          equalparallel: '\\mathrel{\\rlap{\\raise{3.5mu}{\\mskip{3.5mu}\\shortparallel}}\\raise{-3mu}{=}}',
+          number: ['\\num[group-minimum-digits=3, retain-explicit-plus=true]{#1}', 1],
+          parallel: '\\mathrel{/\\mskip-2.5mu/}',
+          parallelogram: ['\\unicode{x25B1}'],
+          quantity: ['\\number{#1}~\\unit{#2}', 2],
+          unit: ['\\si{#1}', 1],
+          backcong: '{≌≌}',
+          year: ['#1', 1],
+          lcm: ['\\mathop{\\mathrm{lcm}}'],
+          pprime: '{\\prime\\prime}'
+        },
+        packages: { '[+]': ['physics', 'mhchem'] }
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a'],
+        ignoreHtmlClass: "comment-content",
+        enableMenu: false,
+        processHtmlClass: 'tex2jax_process',
+        // 去掉辅助性（盲文）渲染后，渲染速度爆炸提升！注意这是mathjax5专属的属性。见 https://github.com/mathjax/MathJax/issues/3228
+        menuOptions: {
+          settings: {
+            enrich: false
+          }
+        },
+        a11y: {
+          speech: false,
+          braille: false,
+          subtitles: false,
+          viewBraille: false
+        }
+      },
+      loader: { load: ['[tex]/physics', '[tex]/mhchem'] },
+      // mathjax 4 才有，用于支持自动换行。mathjax3不支持自动换行
+      // https://github.com/mathjax/MathJax-src/releases/tag/4.0.0-alpha.1#linebreaking
+      svg: {
+        linebreaks: {                  // options for when overflow is linebreak
+          inline: true,                   // true for browser-based breaking of inline equations
+          width: '100%',                  // a fixed size or a percentage of the container width
+          lineleading: .2,                // the default lineleading in em units
+          LinebreakVisitor: null,         // The LinebreakVisitor to use
+        },
+      },
+      // 4版本修改了默认字体，这里改回3的默认
+      // https://github.com/mathjax/MathJax-src/releases/tag/4.0.0-alpha.1#fonts
+      output: {
+        font: 'mathjax-tex'
+      },
+      // 2中引入的插件，都自动引入了，不需要再引入
+      // ["AMSmath.js","AMSsymbols.js","extpfeil.js","mhchem.js", "autobold.js", "enclose.js", "color.js"]
+    };
+  </script>
+  <script id="MathJax-script" async src="./static/mathjax/4.0.0-beta.6/tex-svg.js"></script>
+
+
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

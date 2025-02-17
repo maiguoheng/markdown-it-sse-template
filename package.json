@@ -1,0 +1,23 @@
+{
+  "name": "markdown-it-sse-template",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "markdown-it": "^14.1.0",
+    "prismjs": "^1.29.0",
+    "simple-mind-map": "^0.13.1-fix.1",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "pug": "^3.0.3",
+    "stylus": "^0.64.0",
+    "vite": "^6.1.0"
+  }
+}

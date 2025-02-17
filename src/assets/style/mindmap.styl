@@ -1,0 +1,289 @@
+// 指示点的宽高
+$roundHeight = 0.07rem
+.mind-node-wrapper
+  display: flex
+  align-items: flex-start
+.mind-map-wrapper
+  .level-2
+    &.has-child-wrapper
+      margin-top 0.2rem    
+      margin-right 0.2rem
+      position relative
+      align-self: stretch
+    // 将这个节点加个背景，就知道befor和after中的calc咋回事了
+    // 模拟线
+    &.show-bottom-line
+      // 二级节点-绿色-竖向
+      &.mind-node-green
+        &:before
+          background: #B7E660
+        &:after
+          border 1px solid #B7E660
+      // 二级节点-橙色-竖向
+      &.mind-node-orange
+        &:before
+          background: #FFD752
+        &:after
+          border 1px solid #FFD752
+      // 二级节点-红色-竖向
+      &.mind-node-red
+        &:before
+          background: #FFA052
+        &:after
+          border 1px solid #FFA052
+      // 无子节点的时候，要重新定位
+      &.no-child
+        // 下方的线
+        &:before
+          content: ''
+          position: absolute
+          top 100%
+          left: 0.33rem
+          // 即：0.2rem - %roundHeight
+          height: 'calc(0.2rem - %s)' % $roundHeight
+
+      // 默认有子节点（三级节点，此时默认二级节点高度为0.4rem）
+      &:before
+        content: ''
+        position: absolute
+        top 0.4rem
+        left: 0.33rem
+        width: 0.01rem
+        // 即：100% + 0.2rem - 0.4rem - %roundHeight
+        height: 'calc(100% + 0.2rem - 0.4rem - %s)' % $roundHeight
+      // 模拟线的点
+      &:after
+        content: ''
+        position: absolute
+        // 即：100% + 0.2rem - %roundHeight
+        top 'calc(100% + 0.2rem - %s)' % $roundHeight
+        left: 0.33rem
+        transform: translate(-50%, 0)
+        width: $roundHeight
+        height: $roundHeight
+        box-sizing: border-box
+        border-radius: 100%
+    .mindmap-base-node
+      margin-top 0
+      
+  .mindmap-base-node
+    color var(--Color_text_pop)
+    border-radius: 0.1rem
+    line-height 0.24rem
+    padding 0.08rem 0.16rem
+    box-sizing: border-box
+    margin-top 0.2rem    
+    width fit-content
+    position: relative
+    // 一级节点 
+    &.level-1
+      margin-right 0.2rem
+      // 一级节点-绿色
+      &.mind-node-green
+        background: #B7E660
+        &:before
+          background: #B7E660
+        &:after
+          border 1px solid #B7E660
+      // 一级节点-橙色
+      &.mind-node-orange
+        background: #FFD752
+        &:before
+          background: #FFD752
+        &:after
+          border 1px solid #FFD752
+      // 一级节点-红色
+      &.mind-node-red
+        background: #FFA052
+        &:before
+          background: #FFA052
+        &:after
+          border 1px solid #FFA052
+      &.has-child
+        // 模拟线
+        &:before
+          content: ''
+          position: absolute
+          top 100%
+          left: 50%
+          width: 0.01rem
+          height: 0.13rem
+        // 模拟线的点
+        &:after
+          content: ''
+          position: absolute
+          top calc(100% + 0.13rem)
+          left: 50%
+          transform: translate(-50%, 0)
+          width: $roundHeight
+          height: $roundHeight
+          box-sizing: border-box
+          border-radius: 100%
+
+    // 二级节点
+    &.level-2
+      // 二级节点-绿色-横向
+      &.mind-node-green
+        background: #DEF5AF;
+        &:before
+          background: #B7E660
+        &:after
+          border 1px solid #B7E660
+      // 二级节点-橙色-横向
+      &.mind-node-orange
+        background #FDECA1
+        &:before
+          background: #FFD752
+        &:after
+          border 1px solid #FFD752
+      // 二级节点-红色-横向
+      &.mind-node-red
+        background: #FFCCA2
+        &:before
+          background: #FFA052
+        &:after
+          border 1px solid #FFA052
+      &.has-child
+        max-width 0.96rem
+        // 右边的线
+        &:before
+          content: ''
+          position: absolute
+          top 0.2rem
+          transform: translate(0, -50%)
+          left: 100%
+          width: 'calc(0.2rem - %s)' % $roundHeight
+          height: 0.01rem
+        &:after
+          content: ''
+          position: absolute
+          top 0.2rem
+          transform: translate(0, -50%)
+          // 即：100% + 0.2 - %roundHeight
+          left 'calc(100% + 0.2rem - %s)' % $roundHeight
+          width: $roundHeight
+          height: $roundHeight
+          box-sizing: border-box
+          border-radius: 100%
+
+    // 三级节点
+    &.level-3
+      flex 1
+      text-align: left
+      width 100%
+      // 三级节点-绿色
+      &.mind-node-green
+        background: #F1FFD0;
+      // 三级节点-橙色
+      &.mind-node-orange
+        background #FCF5CD
+      // 三级节点-红色
+      &.mind-node-red
+        background: #FFE7D4
+      &+.level-3
+        margin-top 0.1rem
+      &:not(:last-of-type)
+        // 模拟线，这里是没有点的
+        &:before
+          content: ''
+          position: absolute
+          top 100%
+          left: 50%
+          width: 0.01rem
+          background: #FFD752
+          height: 0.1rem
+        
+
+    &.level-2.no-child
+      text-align: left
+// 暗夜模式下，颜色要改变
+body.dark
+  .mind-map-wrapper
+    .level-2
+      &.has-child-wrapper
+      // 模拟线
+      &.show-bottom-line
+        // 二级节点-绿色-竖向
+        &.mind-node-green
+          &:before
+            background: #779B34;
+          &:after
+            border 1px solid #779B34
+        // 二级节点-橙色-竖向
+        &.mind-node-orange
+          &:before
+            background: #A58928;
+          &:after
+            border 1px solid #A58928
+        // 二级节点-红色-竖向
+        &.mind-node-red
+          &:before
+            background: #754A27;
+          &:after
+            border 1px solid #754A27
+        // 无子节点的时候，要重新定位
+    .mindmap-base-node
+      // 一级节点 
+      &.level-1
+        margin-right 0.2rem
+        // 一级节点-绿色
+        &.mind-node-green
+          background: #779B34;
+          &:before
+            background: #779B34
+          &:after
+            border 1px solid #779B34
+        // 一级节点-橙色
+        &.mind-node-orange
+          background: #A58928
+          &:before
+            background: #A58928
+          &:after
+            border 1px solid #A58928
+        // 一级节点-红色
+        &.mind-node-red
+          background: #754A27
+          &:before
+            background: #754A27
+          &:after
+            border 1px solid #754A27
+
+      // 二级节点
+      &.level-2
+        // 二级节点-绿色-横向
+        &.mind-node-green
+          background: #77845C;
+          &:before
+            background: #779B34;
+          &:after
+            border 1px solid #779B34
+        // 二级节点-橙色-横向
+        &.mind-node-orange
+          background: #938958;
+          &:before
+            background: #A58928;
+          &:after
+            border 1px solid #A58928
+        // 二级节点-红色-横向
+        &.mind-node-red
+          background: #604B39
+          &:before
+            background: #754A27
+          &:after
+            border 1px solid #754A27
+
+      // 三级节点
+      &.level-3
+        // 三级节点-绿色
+        &.mind-node-green
+          background: #444A33;
+        // 三级节点-橙色
+        &.mind-node-orange
+          background #4C4939
+        // 三级节点-红色
+        &.mind-node-red
+          background: #4A4037
+        &:not(:last-of-type)
+          // 模拟线，这里是没有点的
+          &:before
+            background: #A58928
