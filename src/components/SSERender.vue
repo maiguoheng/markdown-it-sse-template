@@ -177,20 +177,19 @@ function startInterval() {
     intervalId = setInterval(() => {
       let length = showText.value.length;
       // 此时这里的定时器会导致页面卡顿，因此增加读取量，使得可以一次读更多，减少卡顿
-      showText.value += targetText.value.slice(length, length + 5);
+      showText.value += targetText.value.slice(length, length + 3);
       if (showText.value.length >= targetText.value.length) {
         clearInterval(intervalId);
         intervalId = ''
         utils.removeSseCursor(true)
       }
-    }, 200)
+    }, 50)
   }
 }
 startInterval()
 const reset = () => {
   showText.value = ''
   targetText.value = ''
-  clearImmediate()
 }
 const regenerate = () => {
   window.disableAutoScroll = false
