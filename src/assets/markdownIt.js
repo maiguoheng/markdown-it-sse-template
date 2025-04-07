@@ -1,6 +1,7 @@
 /* eslint-disable */
 import markdownIt from 'markdown-it'
 import markdownToMindMapRule from './markdownMindMapRule.js'
+import echartsHtmlRule from './echartsHtmlRule.js'
 import Prism from 'prismjs'
 // 加载markdown依赖
 import 'prismjs/components/prism-markdown.min.js';
@@ -48,6 +49,10 @@ md.inline.ruler.unshift = md.block.ruler.unshift = function (ruleName, fn, optio
 }
 // 自定义规则处理markdown-mindmap标签
 md.block.ruler.unshift('markdown_mindmap', markdownToMindMapRule, {
+  alt: ['paragraph', 'reference', 'blockquote']
+})
+// 自定义规则处理echarts
+md.block.ruler.unshift('markdown_mindmap', echartsHtmlRule, {
   alt: ['paragraph', 'reference', 'blockquote']
 })
 // 自定义渲染规则来处理 LaTeX 公式

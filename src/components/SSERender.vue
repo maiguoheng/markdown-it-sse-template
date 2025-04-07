@@ -8,7 +8,8 @@
     button(@click="reset") 清空
     button(@click="regenerate") 重新生成
   div(style="margin: 0.2rem auto;font-weight:bold") 生成结果:
-  .mind-map-wrapper.result_text(v-html="html")
+  //- iframe(id="iframe" src="./#/mdTestOnly?iframe=true" style="width:100%;height:400px;border:none;overflow:auto;")
+  .mind-map-wrapper.result_text(ref="resultRef" v-html="html")
   .bottom-element(ref="bottomElementRef")
 </template>
 
@@ -23,10 +24,72 @@ import utils from '../assets/utils'
 
 const showText = ref('')
 const bottomElementRef = ref(null)
+const resultRef = ref(null)
 let intervalId
+// onMounted(() => {
+//   const iframe = document.getElementById('iframe')
+//   iframe.onload = () => {
+//     iframe.contentWindow.postMessage(testChartsHtml.value, '*')
+//   }
 
+// })
+const testChartsHtml = ref(`
+:echarts
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECharts Pie Chart</title>
+    <!-- 引入 ECharts 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"><\/script>
+<\/head>
+
+<body>
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '简单饼图示例',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '50%',
+                    data: [
+                        { value: 1048, name: '搜索引擎' },
+                        { value: 735, name: '直接访问' },
+                        { value: 580, name: '邮件营销' },
+                        { value: 484, name: '联盟广告' },
+                        { value: 300, name: '视频广告' }
+                    ]
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+        console.error('abcd')
+    <\/script>
+<\/body>
+
+<\/html>
+echarts
+`)
 // 测试流式生成以及其他情况！
 const targetText = ref(`
+    
 ### **物理公式测试**
 \\[\\acomm{A,B} = AB + BC \\quad \\frac{\\partial}{\\partial x} \\]
   \\[
@@ -50,7 +113,9 @@ const targetText = ref(`
 ##### 标题5
 ###### 标题6
 
----
+---`+ `
+${testChartsHtml.value}
+`+ `
 
 ## 文本格式
 *这是斜体文本*  
@@ -159,16 +224,28 @@ function scrollIntoView() {
   }
   nextTick(() => {
     if (bottomElementRef.value) {
-      bottomElementRef.value.scrollIntoView({
-        behavior: 'smooth',
-      })
+      // bottomElementRef.value.scrollIntoView({
+      //   behavior: 'smooth',
+      // })
     }
   })
 }
 
 // 模拟sse输出
 function startInterval() {
+  function handleIframe() {
+    if (resultRef.value.querySelectorAll('iframe').length > 0) {
+      setTimeout(() => {
+        const iframe = resultRef.value.querySelectorAll('iframe')[0]
+        const prefix = iframe.getAttribute('prefix')
+        iframe.contentWindow.postMessage(window[prefix], '*')
+      }, 2000)
+    }
+  }
   if (showText.value === targetText.value) {
+    // 处理iframe
+    handleIframe()
+
     clearInterval(intervalId)
     return
   }
@@ -177,8 +254,9 @@ function startInterval() {
     intervalId = setInterval(() => {
       let length = showText.value.length;
       // 此时这里的定时器会导致页面卡顿，因此增加读取量，使得可以一次读更多，减少卡顿
-      showText.value += targetText.value.slice(length, length + 3);
+      showText.value += targetText.value.slice(length, length + 30);
       if (showText.value.length >= targetText.value.length) {
+        handleIframe()
         clearInterval(intervalId);
         intervalId = ''
         utils.removeSseCursor(true)
